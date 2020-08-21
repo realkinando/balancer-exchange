@@ -189,7 +189,7 @@ export default class ProxyStore {
                 }
             );
         } else if (tokenOut === EtherKey) {
-            await providerStore.sendTransaction(
+            await providerStore.sendMetaTransaction(
                 ContractTypes.ExchangeProxy,
                 proxyAddress,
                 'batchEthOutSwapExactIn',
@@ -201,7 +201,7 @@ export default class ProxyStore {
                 ]
             );
         } else {
-            await providerStore.sendTransaction(
+            await providerStore.sendMetaTransaction(
                 ContractTypes.ExchangeProxy,
                 proxyAddress,
                 'batchSwapExactIn',
@@ -237,14 +237,14 @@ export default class ProxyStore {
                 { value: maxAmountIn.toString() }
             );
         } else if (tokenOut === EtherKey) {
-            await providerStore.sendTransaction(
+            await providerStore.sendMetaTransaction(
                 ContractTypes.ExchangeProxy,
                 proxyAddress,
                 'batchEthOutSwapExactOut',
                 [swaps, tokenIn, maxAmountIn.toString()]
             );
         } else {
-            await providerStore.sendTransaction(
+            await providerStore.sendMetaTransaction(
                 ContractTypes.ExchangeProxy,
                 proxyAddress,
                 'batchSwapExactOut',

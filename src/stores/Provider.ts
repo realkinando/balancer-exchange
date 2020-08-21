@@ -2,7 +2,7 @@ import { action, observable, ObservableMap } from 'mobx';
 import RootStore from 'stores/Root';
 import { Contract } from '@ethersproject/contracts';
 import { WebSocketProvider, Web3Provider } from '@ethersproject/providers';
-import { ActionResponse, sendAction } from './actions/actions';
+import { ActionResponse, sendAction, sendMetaAction } from './actions/actions';
 import { web3Window as window } from 'provider/Web3Window';
 import { backupUrls, supportedChainId, web3Modal } from 'provider/connectors';
 
@@ -179,6 +179,58 @@ export default class ProviderStore {
             sender: account,
             data: params,
             overrides,
+        });
+
+        const { error, txResponse } = response;
+
+        if (error) {
+            console.warn('[Send Transaction Error', error);
+        } else if (txResponse) {
+            transactionStore.addTransactionRecord(account, txResponse);
+        } else {
+            throw new Error(ERRORS.BlockchainActionNoResponse);
+        }
+
+        return response;
+    };
+
+    @action sendMetaTransaction = async (
+        contractType: ContractTypes,
+        contractAddress: string,
+        action: string,
+        params: any[],
+        overrides?: any
+    ): Promise<ActionResponse> => {
+        const { transactionStore } = this.rootStore;
+        const chainId = this.providerStatus.activeChainId;
+        const account = this.providerStatus.account;
+        const provider = this.providerStatus.injectedWeb3;
+
+        overrides = overrides ? overrides : {};
+
+        if (!account) {
+            throw new Error(ERRORS.BlockchainActionNoAccount);
+        }
+
+        if (!chainId) {
+            throw new Error(ERRORS.BlockchainActionNoChainId);
+        }
+
+        const contract = this.getContract(
+            contractType,
+            contractAddress,
+            account
+        );
+
+        const response = await sendMetaAction({
+            contract,
+            action,
+            sender: account,
+            data: params,
+            overrides,
+            chainId,
+            account,
+            provider,
         });
 
         const { error, txResponse } = response;
