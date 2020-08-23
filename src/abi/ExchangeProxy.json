@@ -1,8 +1,5 @@
 {
-    "compiler": {
-        "version": "0.5.12+commit.7709ece9"
-    },
-    "language": "Solidity",
+    "contractName": "MexaExchangeProxy",
     "abi": [
         {
             "inputs": [
@@ -42,6 +39,31 @@
             "type": "event"
         },
         {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "userAddress",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "address payable",
+                    "name": "relayerAddress",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "bytes",
+                    "name": "functionSignature",
+                    "type": "bytes"
+                }
+            ],
+            "name": "MetaTransactionExecuted",
+            "type": "event"
+        },
+        {
             "payable": true,
             "stateMutability": "payable",
             "type": "fallback"
@@ -72,7 +94,7 @@
                             "type": "uint256"
                         }
                     ],
-                    "internalType": "struct ExchangeProxy.Swap[]",
+                    "internalType": "struct MexaExchangeProxy.Swap[]",
                     "name": "swaps",
                     "type": "tuple[]"
                 },
@@ -125,7 +147,7 @@
                             "type": "uint256"
                         }
                     ],
-                    "internalType": "struct ExchangeProxy.Swap[]",
+                    "internalType": "struct MexaExchangeProxy.Swap[]",
                     "name": "swaps",
                     "type": "tuple[]"
                 },
@@ -173,7 +195,7 @@
                             "type": "uint256"
                         }
                     ],
-                    "internalType": "struct ExchangeProxy.Swap[]",
+                    "internalType": "struct MexaExchangeProxy.Swap[]",
                     "name": "swaps",
                     "type": "tuple[]"
                 },
@@ -231,7 +253,7 @@
                             "type": "uint256"
                         }
                     ],
-                    "internalType": "struct ExchangeProxy.Swap[]",
+                    "internalType": "struct MexaExchangeProxy.Swap[]",
                     "name": "swaps",
                     "type": "tuple[]"
                 },
@@ -284,7 +306,7 @@
                             "type": "uint256"
                         }
                     ],
-                    "internalType": "struct ExchangeProxy.Swap[]",
+                    "internalType": "struct MexaExchangeProxy.Swap[]",
                     "name": "swaps",
                     "type": "tuple[]"
                 },
@@ -347,7 +369,7 @@
                             "type": "uint256"
                         }
                     ],
-                    "internalType": "struct ExchangeProxy.Swap[]",
+                    "internalType": "struct MexaExchangeProxy.Swap[]",
                     "name": "swaps",
                     "type": "tuple[]"
                 },
@@ -378,28 +400,113 @@
             "payable": false,
             "stateMutability": "nonpayable",
             "type": "function"
-        }
-    ],
-    "settings": {
-        "compilationTarget": {
-            "contracts/ExchangeProxy.sol": "ExchangeProxy"
         },
-        "evmVersion": "petersburg",
-        "libraries": {},
-        "optimizer": {
-            "enabled": true,
-            "runs": 10000
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "userAddress",
+                    "type": "address"
+                },
+                {
+                    "internalType": "bytes",
+                    "name": "functionSignature",
+                    "type": "bytes"
+                },
+                {
+                    "internalType": "bytes32",
+                    "name": "sigR",
+                    "type": "bytes32"
+                },
+                {
+                    "internalType": "bytes32",
+                    "name": "sigS",
+                    "type": "bytes32"
+                },
+                {
+                    "internalType": "uint8",
+                    "name": "sigV",
+                    "type": "uint8"
+                }
+            ],
+            "name": "executeMetaTransaction",
+            "outputs": [
+                {
+                    "internalType": "bytes",
+                    "name": "",
+                    "type": "bytes"
+                }
+            ],
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "function"
         },
-        "remappings": []
-    },
-    "sources": {
-        "contracts/ExchangeProxy.sol": {
-            "keccak256": "0xfe08bfb07fc064a79d852dcaf2c83aee207d5e2b3e13a30f913250d8fb821ceb",
-            "urls": [
-                "bzz-raw://42174756a8b453c534f56a1dcd7303b09d3d156ff1f4252d97a3144895c152f9",
-                "dweb:/ipfs/QmX8AWirTAPsaFbYe375p9WhC7m61JDM1xP2ciqssxDENB"
-            ]
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "getChainID",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "id",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "pure",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "owner",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "chainID",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bytes",
+                    "name": "functionSignature",
+                    "type": "bytes"
+                },
+                {
+                    "internalType": "bytes32",
+                    "name": "sigR",
+                    "type": "bytes32"
+                },
+                {
+                    "internalType": "bytes32",
+                    "name": "sigS",
+                    "type": "bytes32"
+                },
+                {
+                    "internalType": "uint8",
+                    "name": "sigV",
+                    "type": "uint8"
+                }
+            ],
+            "name": "verify",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
         }
-    },
-    "version": 1
+    ]
 }

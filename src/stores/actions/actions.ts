@@ -3,8 +3,8 @@ import { TransactionResponse } from '@ethersproject/providers';
 import { toBuffer } from 'ethereumjs-util';
 var abi = require('ethereumjs-abi');
 
-const biconomyID = '';
-const biconomyX = '';
+const biconomyID = 'ea9c2ae9-f3cf-45fb-8c39-766d0811bde9';
+const biconomyX = '50KmfA5cK.c0d8cd96-4a87-47c9-9f2c-3f046baef8f1';
 
 interface MetaActionRequest {
     contract: Contract;
