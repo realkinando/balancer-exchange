@@ -1,5 +1,8 @@
 import { action, observable } from 'mobx';
-import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers';
+import {
+    TransactionReceipt,
+    TransactionResponse,
+} from '@ethersproject/providers';
 import RootStore from 'stores/Root';
 
 export interface TransactionRecord {
@@ -95,10 +98,7 @@ export default class TransactionStore {
     }
 
     // @dev Add transaction record. It's in a pending state until mined.
-    @action addTransactionRecord(
-        account: string,
-        txResponse: TransactionResponse
-    ) {
+    @action addTransactionRecord(account: string, txResponse: any) {
         const record: TransactionRecord = {
             hash: txResponse.hash,
             response: txResponse,

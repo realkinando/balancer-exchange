@@ -3,7 +3,7 @@ import { TransactionResponse } from '@ethersproject/providers';
 import { toBuffer } from 'ethereumjs-util';
 var abi = require('ethereumjs-abi');
 
-const biconomyID = 'ea9c2ae9-f3cf-45fb-8c39-766d0811bde9';
+const biconomyID = '78c0c2d7-aa8c-47d2-808f-cc68d22a2dd7';
 const biconomyX = '50KmfA5cK.c0d8cd96-4a87-47c9-9f2c-3f046baef8f1';
 
 interface MetaActionRequest {
@@ -30,7 +30,7 @@ export interface ActionResponse {
     action: string;
     sender: string;
     data: object;
-    txResponse: TransactionResponse | undefined;
+    txResponse: any | undefined;
     error: any | undefined;
 }
 
@@ -59,14 +59,15 @@ const getMetaTxData = async (
     contract,
     action: string,
     params: any[],
-    chainId
+    chainId,
+    account
 ) => {
-    const account = this.providerStatus.account;
-    //not msg.sig but the calldata that will be passed to the contract
-    const functionSignature = contract.interface.functions.encode[action](
-        params
+    const functionPopulated = await contract.populateTransaction[action](
+        ...params
     );
-    const nonce = await contract.getNonce(account);
+    const functionSignature = functionPopulated.data;
+    const nonceBigNo = await contract.nonces(account);
+    const nonce = nonceBigNo.toNumber();
     const messageToSign = constructMetaTransactionMessage(
         nonce,
         chainId,
@@ -120,13 +121,13 @@ export const sendMetaAction = async (
         txResponse: undefined,
         error: undefined,
     };
-
     try {
         const { functionSignature, message } = await getMetaTxData(
             contract,
             action,
             data,
-            chainId
+            chainId,
+            account
         );
         const { r, s, v } = await personalSign(provider, account, message);
         //replace with fetch API calls
@@ -149,11 +150,12 @@ export const sendMetaAction = async (
         );
         if (biconomy.ok) {
             const responseJson = await biconomy.json();
-            const txHash = responseJson.txHash;
-            console.log('TX Succesful ', txHash);
+            const txHash = responseJson['txHash'];
+            const txObj = { hash: txHash };
+            actionResponse.txResponse = txObj;
         } else {
             const responseJson = await biconomy.json();
-            console.log('error', responseJson);
+            throw responseJson;
         }
     } catch (e) {
         actionResponse.error = e;
@@ -183,7 +185,6 @@ export const sendAction = async (
     } catch (e) {
         actionResponse.error = e;
     }
-
     postLog(actionResponse);
     return actionResponse;
 };

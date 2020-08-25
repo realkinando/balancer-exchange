@@ -23,8 +23,7 @@
     "kovan": {
         "chainId": 42,
         "bFactory": "0x8f7F78080219d4066A8036ccD30D588B416a40DB",
-        //Changed to MexaExchangeProxy address
-        "proxy": "0x43823E370cBa2cda8cD2b37D111eAB24AbCB6d3C",
+        "proxy": "0xf5D53D5C38204b9dFbF68B780834e6c1e0FF5378",
         "weth": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
         "multicall": "0x2cc8688C5f75E365aaEEb4ea8D6a480405A48D2A",
         "tokens": [
